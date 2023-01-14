@@ -12,13 +12,13 @@ variable "github-pat" {
   description = "GitHub PAT with repo scope"
 }
 
-variable "runner_name" {
+variable "repo-owner" {
   type = string
 }
-variable "url" {
+variable "repo-name" {
   type = string
 }
 
-variable "runner_token" {
+variable "runner_name" {
   type = string
 }
