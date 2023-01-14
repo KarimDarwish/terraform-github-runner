@@ -1,6 +1,6 @@
 locals {
   runner_token = jsondecode(data.http.github_token_request.response_body).token
-  auth_format = "${var.github-username}:${var.github-pat}"
+  auth_format = "${var.github_username}:${var.github_pat}"
 }
 
 data "http" "github_token_request" {
@@ -23,8 +23,8 @@ data "http" "github_token_request" {
 module "ec2-github-runner" {
   source = "../github-runner"
 
-  github-pat = var.github-pat
-  github-username = var.github-username
+  github_pat = var.github_pat
+  github_username = var.github_username
   runner_name = var.runner_name
   runner_token = local.runner_token
   url = "https://github.com/${var.org-name}"

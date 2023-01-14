@@ -15,28 +15,23 @@ provider "aws" {
   region = "eu-central-1"
 }
 
+module "org-runner-001"  {
+  source = "./modules/github-org-runner"
 
-module "runner-001" {
-  source = "./modules/github-runner"
+  runner_name = "gh-runner-001"
+  org-name = var.org_name
+  github_username = var.repo_owner
+  github_pat = var.github_org_pat
+}
+
+module "repo-runner-001" {
+  source = "./modules/github-repo-runner"
 
   runner_name = "gh-runner-001"
 
-  github-username = var.github-username
-  github-pat = var.github-pat
+  github_username = var.github_username
+  github_pat = var.github_pat
 
-  repo-name = var.repo-name
-  repo-owner = var.repo-owner
+  repo-name = var.repo_name
+  repo-owner = var.repo_owner
 }
-
-module "runner-002"  {
-  source = "./modules/github-runner"
-
-  runner_name = "gh-runner-002"
-
-  github-username = var.github-username
-  github-pat = var.github-pat
-
-  repo-name = var.repo-name
-  repo-owner = var.repo-owner
-}
-

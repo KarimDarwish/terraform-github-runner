@@ -1,13 +1,13 @@
 
-variable "ec2-instance-type" {
+variable "ec2_instance_type" {
   type = string
   default = "t3.micro"
 }
-variable "github-username" {
+variable "github_username" {
   type = string
 }
 
-variable "github-pat" {
+variable "github_pat" {
   type = string
   description = "GitHub PAT with repo scope"
 }

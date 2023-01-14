@@ -15,7 +15,7 @@ data "aws_ami" "ami" {
 
 resource "aws_instance" "web" {
   ami           = data.aws_ami.ami.id
-  instance_type = var.ec2-instance-type
+  instance_type = var.ec2_instance_type
 
   user_data = templatefile("${path.module}/templates/start-gh-runner-user-data.sh", {
     url = var.url,
