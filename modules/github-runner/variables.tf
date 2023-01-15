@@ -27,3 +27,12 @@ variable "url" {
 variable "runner_token" {
   type = string
 }
+
+variable "root_block_device" {
+  type = object({
+    volume_size           = string,
+    volume_type           = string,
+    encrypted             = bool,
+    delete_on_termination = bool
+  })
+}

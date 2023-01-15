@@ -53,6 +53,15 @@ module "repo-runner-001" {
   ec2_instance_type = "t3.micro"
   subnet_id = module.vpc.subnet_id
   vpc_security_group_ids = [module.vpc.security_group_id]
+  
+  root_block_device = {
+    volume_size           = 120
+    volume_type           = "gp3"
+    encrypted             = true
+    delete_on_termination = true
+  }
+  
+  depends_on = [module.vpc]
 }
 ```
 
@@ -76,6 +85,15 @@ module "org-runner-001" {
   ec2_instance_type = "t3.micro"
   subnet_id = module.vpc.subnet_id
   vpc_security_group_ids = [module.vpc.security_group_id]
+  
+  root_block_device = {
+    volume_size           = 120
+    volume_type           = "gp3"
+    encrypted             = true
+    delete_on_termination = true
+  }
+  
+  depends_on = [module.vpc]
 }
 ```
 

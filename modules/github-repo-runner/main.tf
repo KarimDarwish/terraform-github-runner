@@ -34,5 +34,7 @@ module "ec2-github-runner" {
   subnet_id = var.subnet_id
   vpc_security_group_ids = var.vpc_security_group_ids
 
+  root_block_device = var.root_block_device
+
   url = "https://github.com/${var.repo-owner}/${var.repo-name}"
 }

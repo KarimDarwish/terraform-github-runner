@@ -13,6 +13,7 @@ data "aws_ami" "ami" {
   }
 }
 
+
 resource "aws_instance" "web" {
   ami           = data.aws_ami.ami.id
   instance_type = var.ec2_instance_type
@@ -25,6 +26,13 @@ resource "aws_instance" "web" {
     runner_token = var.runner_token
     runner_name = var.runner_name
   })
+
+  root_block_device {
+    volume_size           = var.root_block_device.volume_size
+    volume_type           = var.root_block_device.volume_type
+    encrypted             = var.root_block_device.encrypted
+    delete_on_termination = var.root_block_device.delete_on_termination
+  }
 
   tags = {
     Name = var.runner_name
