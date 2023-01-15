@@ -13,6 +13,10 @@ This project provides:
 
 ## Terraform
 
+### Prerequisite
+
+- Make sure you built the AMI using `packer build` before running Terraform. Alternatively, specify another AMI by exposing a variable.
+
 ### Considerations
 
 - The PAT will not be stored/used on the EC2 machines, they will just be used to request short-lived (60min) runner tokens using Terraform to register the runners
