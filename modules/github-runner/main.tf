@@ -17,6 +17,9 @@ resource "aws_instance" "web" {
   ami           = data.aws_ami.ami.id
   instance_type = var.ec2_instance_type
 
+  vpc_security_group_ids = var.vpc_security_group_ids
+  subnet_id = var.subnet_id
+
   user_data = templatefile("${path.module}/templates/start-gh-runner-user-data.sh", {
     url = var.url,
     runner_token = var.runner_token
@@ -25,7 +28,7 @@ resource "aws_instance" "web" {
 
   tags = {
     Name = var.runner_name
-    Created-By = "Terraform"
+    ManagedBy = "terraform"
   }
 
   lifecycle {

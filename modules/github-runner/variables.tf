@@ -1,6 +1,11 @@
-
-variable "ec2_instance_type" {
+variable "subnet_id" {
   type = string
+}
+variable "vpc_security_group_ids" {
+  type = list(string)
+}
+variable "ec2_instance_type" {
+  type    = string
   default = "t3.micro"
 }
 variable "github_username" {
@@ -8,7 +13,7 @@ variable "github_username" {
 }
 
 variable "github_pat" {
-  type = string
+  type        = string
   description = "GitHub PAT with repo scope"
 }
 

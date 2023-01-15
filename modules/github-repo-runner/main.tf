@@ -30,5 +30,9 @@ module "ec2-github-runner" {
   github_username = var.github_username
   runner_name = var.runner_name
   runner_token = local.runner_token
+
+  subnet_id = var.subnet_id
+  vpc_security_group_ids = var.vpc_security_group_ids
+
   url = "https://github.com/${var.repo-owner}/${var.repo-name}"
 }

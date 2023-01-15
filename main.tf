@@ -15,13 +15,9 @@ provider "aws" {
   region = "eu-central-1"
 }
 
-module "org-runner-001"  {
-  source = "./modules/github-org-runner"
-
-  runner_name = "gh-runner-001"
-  org-name = var.org_name
-  github_username = var.repo_owner
-  github_pat = var.github_org_pat
+module "vpc" {
+  source = "./modules/github-runner-vpc"
+  subnet_availability_zone = "eu-central-1a"
 }
 
 module "repo-runner-001" {
@@ -34,4 +30,7 @@ module "repo-runner-001" {
 
   repo-name = var.repo_name
   repo-owner = var.repo_owner
+
+  subnet_id = module.vpc.subnet_id
+  vpc_security_group_ids = [module.vpc.security_group_id]
 }
