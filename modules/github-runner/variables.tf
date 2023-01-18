@@ -36,3 +36,7 @@ variable "root_block_device" {
     delete_on_termination = bool
   })
 }
+
+variable "buildkit_host_ip" {
+  type = string
+}

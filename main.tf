@@ -20,6 +20,15 @@ module "vpc" {
   subnet_availability_zone = "eu-central-1a"
 }
 
+module "buildkit-host-001" {
+  source = "./modules/buildkit-host"
+  host_name = "buildkit-host-001"
+  ec2_instance_type = "t3.micro"
+
+  subnet_id = module.vpc.subnet_id
+  vpc_security_group_ids = [module.vpc.security_group_id]
+}
+
 module "repo-runner-001" {
   source = "./modules/github-repo-runner"
 
@@ -34,12 +43,7 @@ module "repo-runner-001" {
   subnet_id = module.vpc.subnet_id
   vpc_security_group_ids = [module.vpc.security_group_id]
 
-  root_block_device = {
-    volume_size           = 120
-    volume_type           = "gp3"
-    encrypted             = true
-    delete_on_termination = true
-  }
+  buildkit_host_ip = module.buildkit-host-001.private_ip
 
   depends_on = [module.vpc]
 }

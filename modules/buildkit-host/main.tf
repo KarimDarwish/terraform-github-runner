@@ -4,7 +4,7 @@ data "aws_ami" "ami" {
 
   filter {
     name   = "name"
-    values = ["github-runner-amzn2-x86_64-*"]
+    values = ["buildkit-amzn2-amd64-*"]
   }
 
   filter {
@@ -13,7 +13,6 @@ data "aws_ami" "ami" {
   }
 }
 
-
 resource "aws_instance" "web" {
   ami           = data.aws_ami.ami.id
   instance_type = var.ec2_instance_type
@@ -21,12 +20,7 @@ resource "aws_instance" "web" {
   vpc_security_group_ids = var.vpc_security_group_ids
   subnet_id = var.subnet_id
 
-  user_data = templatefile("${path.module}/templates/start-gh-runner-user-data.sh", {
-    url = var.url,
-    runner_token = var.runner_token
-    runner_name = var.runner_name
-    buildkit_host_ip = var.buildkit_host_ip
-  })
+  user_data = file("${path.module}/scripts/buildkit_user_data.sh")
 
   ebs_optimized = true
 
@@ -38,11 +32,11 @@ resource "aws_instance" "web" {
   }
 
   tags = {
-    Name = var.runner_name
+    Name = var.host_name
     ManagedBy = "terraform"
   }
 
   lifecycle {
-    ignore_changes = [user_data]
+    ignore_changes = ["user_data"]
   }
 }

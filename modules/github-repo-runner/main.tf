@@ -36,5 +36,7 @@ module "ec2-github-runner" {
 
   root_block_device = var.root_block_device
 
+  buildkit_host_ip = var.buildkit_host_ip
+
   url = "https://github.com/${var.repo-owner}/${var.repo-name}"
 }

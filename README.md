@@ -1,12 +1,14 @@
-# GitHub Self Hosted Runners in AWS
+# Buildkit + GitHub Self Hosted Runners
 
-This project provides:
-- A Packer image to build an AMI with Docker and the GitHub runner configuration
-- Terraform modules to provision EC2 instances that configure and start a repo/org runner
+This project allows you to provision groups of:
+- a Buildkit host
+- GitHub self-hosted repo/org runners that use this Buildkit host when called with ```docker buildx```
+
+You can link runners for different repos to the same Buildkit host or use multiple Buildkit hosts for the same repository.
 
 ## AWS Architecture
 
-<img width="659" alt="image" src="https://user-images.githubusercontent.com/18162254/212567358-b6c9708e-29a2-4f8c-82db-5cd24ddf227a.png">
+<img width="607" alt="image" src="https://user-images.githubusercontent.com/18162254/213068006-cdaa3cd5-a734-4bcf-8841-6e6ebfe9c2d8.png">
 
 - Only egress traffic on port 443 is allowed
 - Ingress traffic is disabled
@@ -15,7 +17,7 @@ This project provides:
 
 ### Prerequisite
 
-- Make sure you built the AMI using `packer build` before running Terraform. Alternatively, specify another AMI by exposing a variable.
+- Make sure you built the github-runner and buildkit-host AMIs using `packer build` before running Terraform. Alternatively, specify another AMI by exposing a variable.
 
 ### Considerations
 
@@ -35,6 +37,23 @@ module "vpc" {
 will create the AWS VPC and the needed subnets/gateways without creating any runners.
 
 You can also provide your own subnet/security group to be used by the EC2 instances instead.
+
+### Buildkit Host
+This will set up a Buildkit host and start ```buildkitd``` on port 8082 within the private network.
+
+```
+module "buildkit-host-001" {
+  source = "./modules/buildkit-host"
+  host_name = "buildkit-host-001"
+  ec2_instance_type = "t3.micro"
+
+  subnet_id = module.vpc.subnet_id
+  vpc_security_group_ids = [module.vpc.security_group_id]
+}
+```
+
+Output of the module will be the private IP of the host (no public IP is associated)
+
 
 ### Repo Level Runner
 
@@ -102,7 +121,7 @@ module "org-runner-001" {
 ```
 
 
-# Potential Improvements
+# Improvements
 
 - [ ] ARM image/machine support
 - [ ] AWS Network Firewall to only allow outbound traffic to [github domains](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners#communication-between-self-hosted-runners-and-github)
