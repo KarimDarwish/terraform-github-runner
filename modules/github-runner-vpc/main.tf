@@ -89,21 +89,41 @@ resource "aws_route_table_association" "private_to_nat" {
   route_table_id = aws_route_table.to_nat.id
 }
 
-resource "aws_security_group" "https_egress_only" {
+resource "aws_security_group" "default" {
   name        = "github-actions-runner-sg"
   description = "Github Actions Runner Security Group"
   vpc_id      = aws_vpc.github_runner.id
-
-  egress {
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
 
   tags = {
     Name      = "github-runner-security-group"
     ManagedBy = "terraform"
   }
+}
+
+resource "aws_security_group_rule" "https_egress_only" {
+  type              = "egress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  security_group_id = aws_security_group.default.id
+  cidr_blocks      = ["0.0.0.0/0"]
+  ipv6_cidr_blocks = ["::/0"]
+}
+
+resource "aws_security_group_rule" "internal_buildkit_egress" {
+  type              = "egress"
+  from_port         = 8082
+  to_port           = 8082
+  protocol          = "tcp"
+  self = true
+  security_group_id = aws_security_group.default.id
+}
+
+resource "aws_security_group_rule" "internal_buildkit_ingress" {
+  type              = "ingress"
+  from_port         = 8082
+  to_port           = 8082
+  protocol          = "tcp"
+  self = true
+  security_group_id = aws_security_group.default.id
 }

@@ -15,17 +15,17 @@ provider "aws" {
   region = "eu-central-1"
 }
 
-#module "vpc" {
-#  source = "./modules/github-runner-vpc"
-#  subnet_availability_zone = "eu-central-1a"
-#}
+module "vpc" {
+  source = "./modules/github-runner-vpc"
+  subnet_availability_zone = "eu-central-1a"
+}
 
 module "buildkit-host-001" {
   source = "./modules/buildkit-host"
   host_name = "buildkit-host-001"
 
-  subnet_id = "module.vpc.subnet_id"
-  vpc_security_group_ids = ["module.vpc.security_group_id"]
+  subnet_id = module.vpc.subnet_id
+  vpc_security_group_ids = [module.vpc.security_group_id]
 }
 
 module "repo-runner-001" {
@@ -39,10 +39,10 @@ module "repo-runner-001" {
   repo-name = var.repo_name
   repo-owner = var.repo_owner
 
-  subnet_id = "module.vpc.subnet_id"
-  vpc_security_group_ids = ["module.vpc.security_group_id"]
+  subnet_id = module.vpc.subnet_id
+  vpc_security_group_ids = [module.vpc.security_group_id]
 
   buildkit_host_ip = module.buildkit-host-001.private_ip
 
- # depends_on = [module.vpc]
+  depends_on = [module.vpc]
 }

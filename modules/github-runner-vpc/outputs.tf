@@ -7,5 +7,5 @@ output "subnet_id" {
 }
 
 output "security_group_id" {
-  value = aws_security_group.https_egress_only.id
+  value = aws_security_group.default.id
 }
