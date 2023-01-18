@@ -23,6 +23,7 @@ module "vpc" {
 module "buildkit-host-001" {
   source = "./modules/buildkit-host"
   host_name = "buildkit-host-001"
+  ec2_instance_type = "t3.micro"
 
   subnet_id = module.vpc.subnet_id
   vpc_security_group_ids = [module.vpc.security_group_id]
