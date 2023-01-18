@@ -15,16 +15,6 @@ echo "Installing dependency: runc..."
 yum -y install runc
 echo "Dependency installed: runc"
 
-# Swappiness
-#echo "Configuring swappiness to be 0..."
-#
-#dd if=/dev/zero of=/swapfile bs=128M count=32
-#chmod 600 /swapfile
-#mkswap /swapfile
-#swapon /swapfile
-#echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
-#echo "vm.swappiness = 0" >> /etc/sysctl.conf
-
 # Buildkit
 echo "Downloading Buildkit..."
 sudo curl --retry 5 -f --retry-all-errors --retry-delay 5 -o $buildkit_file_name -L "https://github.com/moby/buildkit/releases/download/v0.11.0/buildkit-v0.11.0.linux-amd64.tar.gz"
