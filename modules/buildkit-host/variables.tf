@@ -12,3 +12,19 @@ variable "ec2_instance_type" {
 variable "host_name" {
   type = string
 }
+
+variable "root_block_device" {
+  type = object({
+    volume_size           = string,
+    volume_type           = string,
+    encrypted             = bool,
+    delete_on_termination = bool
+  })
+
+  default = {
+    volume_size           = 100
+    volume_type           = "gp3"
+    encrypted             = true
+    delete_on_termination = false
+  }
+}

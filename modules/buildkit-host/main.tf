@@ -24,6 +24,13 @@ resource "aws_instance" "web" {
 
   ebs_optimized = true
 
+  root_block_device {
+    volume_size           = var.root_block_device.volume_size
+    volume_type           = var.root_block_device.volume_type
+    encrypted             = var.root_block_device.encrypted
+    delete_on_termination = var.root_block_device.delete_on_termination
+  }
+
   tags = {
     Name = var.host_name
     ManagedBy = "terraform"
