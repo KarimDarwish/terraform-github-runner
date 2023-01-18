@@ -31,7 +31,7 @@ source "amazon-ebs" "buildkit" {
 }
 
 build {
-  name = "githubactions-runner"
+  name = "buildkit"
   sources = [
     "source.amazon-ebs.buildkit"
   ]

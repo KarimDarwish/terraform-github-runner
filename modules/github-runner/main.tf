@@ -18,14 +18,17 @@ resource "aws_instance" "web" {
   ami           = data.aws_ami.ami.id
   instance_type = var.ec2_instance_type
 
-  vpc_security_group_ids = var.vpc_security_group_ids
-  subnet_id = var.subnet_id
+#  vpc_security_group_ids = var.vpc_security_group_ids
+#  subnet_id = var.subnet_id
 
   user_data = templatefile("${path.module}/templates/start-gh-runner-user-data.sh", {
     url = var.url,
     runner_token = var.runner_token
     runner_name = var.runner_name
+    buildkit_host_ip = var.buildkit_host_ip
   })
+
+  ebs_optimized = true
 
   root_block_device {
     volume_size           = var.root_block_device.volume_size
