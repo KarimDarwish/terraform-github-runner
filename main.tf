@@ -25,8 +25,14 @@ module "buildkit-host-001" {
   host_name = "buildkit-host-001"
   ec2_instance_type = "t3.micro"
 
+  tls_ca_cert = file("${path.root}/.certs/daemon/ca.pem")
+  tls_cert = file("${path.root}/.certs/daemon/cert.pem")
+  tls_key = file("${path.root}/.certs/daemon/key.pem")
+
   subnet_id = module.vpc.subnet_id
   vpc_security_group_ids = [module.vpc.security_group_id]
+
+  depends_on = [module.vpc]
 }
 
 module "repo-runner-001" {
@@ -45,5 +51,9 @@ module "repo-runner-001" {
 
   buildkit_host_ip = module.buildkit-host-001.private_ip
 
-  depends_on = [module.vpc]
+  tls_ca_cert = file("${path.root}/.certs/client/ca.pem")
+  tls_cert = file("${path.root}/.certs/client/cert.pem")
+  tls_key = file("${path.root}/.certs/client/key.pem")
+
+  depends_on = [module.buildkit-host-001]
 }

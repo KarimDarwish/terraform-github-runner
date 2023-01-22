@@ -38,5 +38,9 @@ module "ec2-github-runner" {
 
   buildkit_host_ip = var.buildkit_host_ip
 
+  tls_ca_cert = var.tls_ca_cert
+  tls_cert = var.tls_cert
+  tls_key = var.tls_key
+
   url = "https://github.com/${var.repo-owner}/${var.repo-name}"
 }
