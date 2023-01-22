@@ -20,7 +20,11 @@ resource "aws_instance" "web" {
   vpc_security_group_ids = var.vpc_security_group_ids
   subnet_id = var.subnet_id
 
-  user_data = file("${path.module}/scripts/buildkit_user_data.sh")
+  user_data = templatefile("${path.module}/templates/cloud-init-config.yml",{
+    tlscacert = var.tls_ca_cert
+    tlscert = var.tls_cert
+    tlskey = var.tls_key
+  })
 
   ebs_optimized = true
 

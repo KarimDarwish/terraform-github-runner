@@ -1,0 +1,33 @@
+#cloud-config
+package_update: false
+package_upgrade: false
+
+write_files:
+  - content: |
+      ${base64encode("${tlscacert}")}
+    encoding: b64
+    owner: root:root
+    path: /opt/actions-runner/ca.pem
+    permissions: '0750'
+  - content: |
+      ${base64encode("${tlscert}")}
+    encoding: b64
+    owner: root:root
+    path: /opt/actions-runner/cert.pem
+    permissions: '0750'
+  - content: |
+      ${base64encode("${tlskey}")}
+    encoding: b64
+    owner: root:root
+    path: /opt/actions-runner/key.pem
+    permissions: '0750'
+
+runcmd:
+ - docker buildx create --name remote-buildkit-host --driver remote --driver-opt cacert=$${PWD}/opt/actions-runner/ca.pem,cert=$${PWD}/opt/actions-runner/cert.pem,key=$${PWD}/opt/actions-runner/key.pem,servername=localhost tcp://${buildkit_host_ip}:8082
+ - docker buildx use remote-buildkit-host
+ - sudo -su ec2-user ./opt/actions-runner/config.sh --unattended --url ${url} --token ${runner_token} --name ${runner_name} --replace
+ - cd /opt/actions-runner
+ - ./svc.sh install
+ - ./svc.sh start
+
+

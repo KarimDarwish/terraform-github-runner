@@ -40,3 +40,15 @@ variable "root_block_device" {
 variable "buildkit_host_ip" {
   type = string
 }
+
+variable "tls_ca_cert" {
+  type = string
+}
+
+variable "tls_cert" {
+  type = string
+}
+
+variable "tls_key" {
+  type = string
+}

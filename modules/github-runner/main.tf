@@ -21,7 +21,10 @@ resource "aws_instance" "web" {
   vpc_security_group_ids = var.vpc_security_group_ids
   subnet_id = var.subnet_id
 
-  user_data = templatefile("${path.module}/templates/start-gh-runner-user-data.sh", {
+  user_data = templatefile("${path.module}/templates/cloud-init-config.yml", {
+    tlscacert = var.tls_ca_cert
+    tlscert = var.tls_cert
+    tlskey = var.tls_key
     url = var.url,
     runner_token = var.runner_token
     runner_name = var.runner_name
